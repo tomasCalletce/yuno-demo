@@ -16,6 +16,7 @@ export default function Home() {
   const router = useRouter();
   const [amount, setAmount] = useState<string>("1000");
   const [country, setCountry] = useState<string>("US");
+  const [currency, setCurrency] = useState<string>("USD");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleStart = async () => {
@@ -41,22 +42,21 @@ export default function Home() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: parseInt(amount),
+          amount: amount,
           country: country,
+          currency: currency,
         }),
       });
 
-      const customerResult = await customerResponse.json();
-      console.log("Customer response body:", customerResult);
-
       const sessionResult = await sessionResponse.json();
-      console.log("Session response body:", sessionResult);
 
       if (customerResponse.ok && sessionResponse.ok) {
         const checkoutSessionId = sessionResult.session?.checkout_session;
 
         if (checkoutSessionId) {
-          router.push(`/checkout/${checkoutSessionId}?country=${country}`);
+          router.push(
+            `/checkout/${checkoutSessionId}?country=${country}&amount=${amount}&currency=${currency}`
+          );
         } else {
           console.error("No checkout session ID found in response");
         }
@@ -89,6 +89,29 @@ export default function Home() {
               onChange={(e) => setAmount(e.target.value)}
               placeholder="Enter amount"
             />
+          </div>
+
+          <div className="text-left">
+            <label
+              htmlFor="currency"
+              className="block text-sm font-medium mb-2"
+            >
+              Currency
+            </label>
+            <Select value={currency} onValueChange={setCurrency}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a currency" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="USD">USD - US Dollar</SelectItem>
+                <SelectItem value="COP">COP - Colombian Peso</SelectItem>
+                <SelectItem value="MXN">MXN - Mexican Peso</SelectItem>
+                <SelectItem value="ARS">ARS - Argentine Peso</SelectItem>
+                <SelectItem value="BRL">BRL - Brazilian Real</SelectItem>
+                <SelectItem value="PEN">PEN - Peruvian Sol</SelectItem>
+                <SelectItem value="EUR">EUR - Euro</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="text-left">

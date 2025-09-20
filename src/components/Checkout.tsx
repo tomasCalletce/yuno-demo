@@ -2,6 +2,8 @@
 
 import { useContext, useEffect } from "react";
 import { AppContext } from "@/context/YunoContext";
+import { useCreatePayment } from "@/hooks/useCreatePayment";
+import { useRouter } from "next/navigation";
 
 interface CheckoutProps {
   paymentMethodType: string;
@@ -14,7 +16,10 @@ export const Checkout: React.FC<CheckoutProps> = ({
   vaultedToken,
   onClose,
 }) => {
-  const { checkoutSession, countryCode, yunoInstance } = useContext(AppContext);
+  const router = useRouter();
+  const { checkoutSession, countryCode, yunoInstance, amount, currency } =
+    useContext(AppContext);
+  const { createPayment } = useCreatePayment();
 
   useEffect(() => {
     (async () => {
@@ -34,10 +39,28 @@ export const Checkout: React.FC<CheckoutProps> = ({
           issuersFormEnable: true,
           showPaymentStatus: true,
           yunoCreatePayment: async (token) => {
+            await createPayment({
+              payment_method: {
+                type: paymentMethodType,
+                token: token,
+              },
+              checkout: {
+                session: checkoutSession,
+              },
+              country: countryCode,
+              amount: {
+                value: amount,
+                currency: currency,
+              },
+            });
+
             yunoInstance.continuePayment({ showPaymentStatus: true });
           },
           yunoPaymentResult: (data) => {
             console.log("yunoPaymentResult", data);
+            if (data === "SUCCEEDED") {
+              router.push(`/`);
+            }
           },
           yunoError: (err) => {
             console.error("Yuno error:", err);

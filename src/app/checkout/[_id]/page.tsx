@@ -16,6 +16,8 @@ export default function CheckoutPage() {
   const { _id: checkoutSessionId } = useParams<{ _id: string }>();
   const searchParams = useSearchParams();
   const country = searchParams.get("country") || "US";
+  const amount = searchParams.get("amount") || "1000";
+  const currency = searchParams.get("currency") || "USD";
 
   const instanceFlag = useRef(0);
   const [yunoInstance, setYunoInstance] = useState<YunoInstance | null>(null);
@@ -40,6 +42,8 @@ export default function CheckoutPage() {
         checkoutSession: checkoutSessionId,
         yunoInstance,
         countryCode: country,
+        amount: amount,
+        currency: currency,
       }}
     >
       <div className="min-h-screen p-8">

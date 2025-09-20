@@ -12,19 +12,7 @@ export async function POST(request: Request) {
     const baseUrl = getYunoBaseUrl();
     const accountId = getAccountId();
 
-    const { amount, country } = await request.json();
-
-    const getCurrency = (countryCode: string) => {
-      const currencyMap: Record<string, string> = {
-        US: "USD",
-        CO: "COP",
-        MX: "MXN",
-        AR: "ARS",
-        BR: "BRL",
-        PE: "PEN",
-      };
-      return currencyMap[countryCode] || "USD";
-    };
+    const { amount, country, currency } = await request.json();
 
     const response = await fetch(`${baseUrl}/v1/checkout/sessions`, {
       method: "POST",
@@ -34,7 +22,7 @@ export async function POST(request: Request) {
         account_id: accountId,
         country: country,
         amount: {
-          currency: getCurrency(country),
+          currency: currency,
           value: amount,
         },
         payment_description: "Yuno Demo Payment",
