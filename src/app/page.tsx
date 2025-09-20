@@ -28,16 +28,10 @@ export default function Home() {
         },
         body: JSON.stringify({
           merchant_customer_id: `steve_jobs_${Date.now()}`,
-          first_name: "Steve",
-          last_name: "Jobs",
-          email: "steve@apple.com",
-          billing_address: {
-            address_line_1: "2066 Crist Drive",
-            city: "Los Altos",
-            state: "California",
-            zip_code: "94024",
-            country: country,
-          },
+          country: country,
+          first_name: "Bruno",
+          last_name: "Oliveira",
+          email: "bruno.oliveira@yunotest.com",
         }),
       });
 
@@ -62,7 +56,7 @@ export default function Home() {
         const checkoutSessionId = sessionResult.session?.checkout_session;
 
         if (checkoutSessionId) {
-          router.push(`/checkout/${checkoutSessionId}`);
+          router.push(`/checkout/${checkoutSessionId}?country=${country}`);
         } else {
           console.error("No checkout session ID found in response");
         }
@@ -117,9 +111,9 @@ export default function Home() {
           </div>
         </div>
 
-        <Button 
-          className="cursor-pointer" 
-          onClick={handleStart} 
+        <Button
+          className="cursor-pointer"
+          onClick={handleStart}
           size="lg"
           disabled={isLoading}
         >

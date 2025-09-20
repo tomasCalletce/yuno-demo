@@ -26,23 +26,19 @@ export async function POST(request: Request) {
       return currencyMap[countryCode] || "USD";
     };
 
-    const currency = getCurrency(country);
-
-    const sessionData = {
-      country: country,
-      merchant_order_id: `order_${Date.now()}`,
-      amount: {
-        currency: currency,
-        value: amount,
-      },
-      payment_description: "Yuno Demo Payment",
-      account_id: accountId,
-    };
-
     const response = await fetch(`${baseUrl}/v1/checkout/sessions`, {
       method: "POST",
       headers,
-      body: JSON.stringify(sessionData),
+      body: JSON.stringify({
+        merchant_order_id: `order_${Date.now()}`,
+        account_id: accountId,
+        country: country,
+        amount: {
+          currency: getCurrency(country),
+          value: amount,
+        },
+        payment_description: "Yuno Demo Payment",
+      }),
     });
 
     const result = await response.json();
