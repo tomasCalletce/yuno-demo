@@ -42,7 +42,7 @@ export default function CheckoutPage() {
         checkoutSession: checkoutSessionId,
         yunoInstance,
         countryCode: country,
-        amount: amount,
+        amount: parseInt(amount),
         currency: currency,
       }}
     >
