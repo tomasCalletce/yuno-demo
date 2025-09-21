@@ -22,31 +22,37 @@ export default function Home() {
   const handleStart = async () => {
     setIsLoading(true);
     try {
-      const customerResponse = await fetch("/api/customers/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          merchant_customer_id: `steve_jobs_${Date.now()}`,
-          country: country,
-          first_name: "Bruno",
-          last_name: "Oliveira",
-          email: "bruno.oliveira@yunotest.com",
-        }),
-      });
+      const customerResponse = await fetch(
+        "https://yuno-demo-eta.vercel.app/api/customers/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            merchant_customer_id: `steve_jobs_${Date.now()}`,
+            country: country,
+            first_name: "Bruno",
+            last_name: "Oliveira",
+            email: "bruno.oliveira@yunotest.com",
+          }),
+        }
+      );
 
-      const sessionResponse = await fetch("/api/session/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: amount,
-          country: country,
-          currency: currency,
-        }),
-      });
+      const sessionResponse = await fetch(
+        "https://yuno-demo-eta.vercel.app/api/session/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: amount,
+            country: country,
+            currency: currency,
+          }),
+        }
+      );
 
       const sessionResult = await sessionResponse.json();
 

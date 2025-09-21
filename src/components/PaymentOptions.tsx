@@ -25,7 +25,7 @@ export const PaymentOptions: React.FC<PaymentOptionsProps> = ({
     const fetchMethods = async () => {
       try {
         const response = await fetch(
-          `/api/session/methods?checkout_session=${checkoutSession}`
+          `https://yuno-demo-eta.vercel.app/api/session/methods?checkout_session=${checkoutSession}`
         );
         const result = await response.json();
         setMethods(result.payment_methods || []);
